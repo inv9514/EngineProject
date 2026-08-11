@@ -48,9 +48,9 @@ namespace Craft
 		inline Vector2 GetPreviousPosition() const { return previousPosition; }
 		inline void SavePreviousState() { previousPosition = position; } 
 
-		// X너비 반환 함수					 // TODO : Y너비 추가
+		// Width Getter		
 		inline int GetWidth() const { return width; }
-
+				
 		// 액터의 이미지 설정 함수
 		inline void ChangeImage(const std::string& newImage)
 		{

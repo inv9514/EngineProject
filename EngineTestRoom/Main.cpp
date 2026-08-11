@@ -10,9 +10,4 @@ int main()
     engine.AddNewLevel<GameLevel>();
     engine.Run();
     
-    
-    // 레벨 생성
-    
-    
-    std::cin.get();
 }

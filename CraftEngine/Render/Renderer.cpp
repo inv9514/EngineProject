@@ -51,12 +51,14 @@ namespace Craft
         // 객체 생성시 생성자에서 기존객체 검사 후 포인터 반환
 		assert(!instance && "instance should be null");
 		instance = this;
+		
 
         // Frame 객체 생성
 		const int bufferCount = screenSize.x * screenSize.y;  
-		frame = std::make_unique<Frame>(bufferCount); // Frame은 화면에 채울 문자 전체를 보유하기에 화면크기 = 배열크기
-		frame->Clear(screenSize);                     // 생성 후 혹시 있을 프레임 지우기
+		frame = std::make_unique<Frame>(bufferCount);  // Frame은 화면에 채울 문자 전체를 보유하기에 화면크기 = 배열크기
+		frame->Clear(screenSize);                      // 생성 후 혹시 있을 프레임 지우기
 
+		
 		// 이중 버퍼 구현을 위한 콘솔 버퍼 생성 및 초기화
 		screenBufferArray[0] = std::make_unique<ScreenBuffer>(screenSize);
 		screenBufferArray[0]->Clear();
@@ -129,13 +131,13 @@ namespace Craft
 			
 			// 인덱스가 그릴 문자값이 없으면 스킵
 			if (command.image.empty()) continue;
-
-			// y 위치가 화면을 벗어났다면 스킵  TODO : y축 역시 x와 동일하게 처리
+			
+			// y 위치가 화면을 벗어났다면 스킵
 			if (command.position.y <0 || command.position.y >= screenSize.y) continue;
 
 			// x 위치가 화면을 벗어났다면 건너뛰기
 			const int length = static_cast<int>(command.image.length());   // 그리려는 문자열 길이 값                       
-			const int startX = command.position.x;                         // 글자의 시작 위치 (가장 왼쪽)                     
+			const int startX = command.position.x;                         // 글자의 시작 위치 (가장 왼쪽)      
 			const int endX = startX + length - 1;                          // 글자의 끝 위치 (가장 오른쪽)                     
 			if (endX < 0 || startX >= screenSize.x) continue;
 
@@ -191,5 +193,5 @@ namespace Craft
 	const ScreenBuffer* const Renderer::GetCurrentBuffer() const
 	{
 		return screenBufferArray[currentBufferIndex].get();
-	}
+	}		
 }

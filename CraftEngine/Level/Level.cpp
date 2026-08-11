@@ -1,10 +1,11 @@
 ﻿#include "Level.h"
 
+
 namespace Craft
 {
 	Level::Level()
-	{
-
+	{		
+		
 	}
 
 	Level::~Level()

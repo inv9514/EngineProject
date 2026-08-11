@@ -3,8 +3,8 @@
 #include <Core/Core.h>
 #include <Actor/Actor.h>
 #include <Core/CraftObject.h>
-#include <memory>		// std::unique_ptr / std::shared_ptr 사용.
-#include <vector>		// std::vector 동적 배열.
+#include <memory>	
+#include <vector>	
 
 namespace Craft
 {
@@ -82,6 +82,6 @@ namespace Craft
 		std::vector<std::shared_ptr<Actor>> actorList;
 
 		// 추가 요청된 액터 (프레임의 드로우가 끝나고 다음 프레임 전에 호출되어 처리)
-		std::vector<std::shared_ptr<Actor>> addRequestedActorList;
+		std::vector<std::shared_ptr<Actor>> addRequestedActorList;					
 	};
 }

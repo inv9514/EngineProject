@@ -8,4 +8,5 @@
     <BuildDependency Project="CraftEngine/CraftEngine.vcxproj" />
   </Project>
   <Project Path="ShootingGame/ShootingGame.vcxproj" Id="99aa23a7-1498-45f4-9dc6-3dcda7b679dd" />
+  <Project Path="Survivor/Survivor.vcxproj" />
 </Solution>
