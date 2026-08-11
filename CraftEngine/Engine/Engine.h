@@ -1,0 +1,85 @@
+﻿#pragma once
+
+#include <Core/Core.h>
+#include <memory>	
+
+namespace Craft
+{
+	class Level;
+	class Input;
+	class Renderer;
+	class CollisionSystem;
+
+	class CRAFT_API Engine
+	{
+		struct Setting
+		{
+			float framerate = 0.0f;
+			int width = 0;
+			int height = 0;
+		};
+
+	public:
+		// 생성자
+		Engine();
+		virtual ~Engine();
+
+		// 엔진 생명 주기
+		void Run();
+
+		void Quit();
+
+		// 엔진에 레벨 추가
+		template<typename T,
+			typename = std::enable_if_t<std::is_base_of<Level, T>::value>>
+		void AddNewLevel()
+		{
+			nextLevel = std::make_shared<T>();
+		}
+
+		// 엔진 싱글톤 객체 Getter
+		static Engine& Get();
+
+		// 엔진 크기
+		inline int GetWidth() const { return setting.width; }    // Engine->Renderer->ScreenBuffer까지 넘어가
+		inline int GetHeight() const { return setting.height; }  // 그곳에서 최종 콘솔사이즈 결정
+
+	protected:
+		// 입력 처리 함수 (입력 폴링)
+		void ProcessInput();
+
+		// 초기화 함수
+		void OnInitialized();
+		
+		// 엔진 Config 로드
+		void LoadEngineSetting();
+
+		/* 게임플레이 이벤트 함수 */
+		void BeginPlay();				 // 게임플레이 초기화
+		void Tick(float deltaTime);		 // 게임플레이 업데이트
+		void Draw();					 // 레벨 그리기
+		void ProcessCollision();		 // 충돌 처리
+		void SavePreviousInputStates();  //  프레임 간 입력값 저장용
+		void Shutdown();				 // 엔진 종료시 리소스 정리		
+
+	protected:
+		// 엔진 종료요청 플래그
+		bool isQuit = false;
+
+		// 엔진 설정 Config 구조체
+		Setting setting;
+	
+		/* 엔진 소유 객체 포인터 */			 
+		static Engine* instance;				// 엔진 싱글톤 객체 포인터
+		
+		std::shared_ptr<Level> mainLevel;		// 현재 레벨
+		
+		std::shared_ptr<Level> nextLevel;		// 추가 요청된 레벨
+	
+		std::unique_ptr<Input> input;			// Input 시스템 
+
+		std::unique_ptr<Renderer> renderer;		// 렌더러 
+		
+		std::unique_ptr<CollisionSystem> collisionSystem; // 콜리전 시스템
+	};
+}
