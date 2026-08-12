@@ -3,6 +3,7 @@
 #include <Core/Core.h>
 #include <Actor/Actor.h>
 #include <Core/CraftObject.h>
+#include <Camera/LevelCamera.h>
 #include <memory>	
 #include <vector>	
 
@@ -16,16 +17,16 @@ namespace Craft
 
 	public:
 		Level();
-		virtual ~Level();
+		virtual ~Level();		
 
-		// 초기화 함수
+	public:
 		virtual void OnInitialized();
 
-		// 게임플레이 이벤트 모음 (레벨 자체는 게임플레이 이벤트의 행동이 없으므로 액터에 이벤트를 흘리는 역할)
 		virtual void BeginPlay();
 		virtual void Tick(float deltaTime);
-		virtual void Draw();
-
+		virtual void Draw();		
+		
+	public:
 		// 레벨에 액터 추가 (탬플릿 함수)
 		template<typename T, typename ...Args,
 			typename = std::enable_if_t<std::is_base_of<Actor, T>::value>>
@@ -82,6 +83,15 @@ namespace Craft
 		std::vector<std::shared_ptr<Actor>> actorList;
 
 		// 추가 요청된 액터 (프레임의 드로우가 끝나고 다음 프레임 전에 호출되어 처리)
-		std::vector<std::shared_ptr<Actor>> addRequestedActorList;					
+		std::vector<std::shared_ptr<Actor>> addRequestedActorList;				
+		
+	/* Camera Section */
+	public:
+		inline const std::shared_ptr<LevelCamera>& GetLevelCamera() const { return levelCamera; }
+		
+		inline void SetLevelCamera(const std::shared_ptr<LevelCamera>& camera) { levelCamera = camera; }
+		
+	private:
+		std::shared_ptr<LevelCamera> levelCamera;
 	};
 }

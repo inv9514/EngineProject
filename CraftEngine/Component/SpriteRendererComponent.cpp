@@ -1,5 +1,4 @@
 ﻿#include "SpriteRendererComponent.h"
-
 #include <Actor/Actor.h>
 #include <Render/Renderer.h>
 
@@ -15,16 +14,20 @@ namespace Craft
         super::Draw();
         
         // Sprite 컴포넌트를 소유한 액터 확인
-        std::shared_ptr<Actor> actor = GetOwner();
-        
+        std::shared_ptr<Actor> actor = GetOwner();        
         if (!actor || !actor->IsActive()) return;
         
         // 액터가 갖고있는 Transform 컴포넌트를 가져옴
         std::shared_ptr<TransformComponent> transform = actor->GetTransform();
         if (!transform) return;
         
+        // 드로우 정보 취합이 끝나고 Submit
+        Submit(transform->GetWorldPosition());        
+    }
+
+    void SpriteRendererComponent::Submit(const Vector2& position)
+    {
         // 렌더러에 드로잉 데이터를 제출
-        Renderer::Get().Submit(image, transform->GetWorldPosition(), color, sortingOrder);
-    
+        Renderer::Get().Submit(image, position, color, sortingOrder);    
     }
 }

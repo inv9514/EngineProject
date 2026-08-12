@@ -37,6 +37,10 @@ namespace Craft
 			if (!actor->IsActive()) continue; // 비활성화 상태인 액터는 스킵
 			actor->Tick(deltaTime);		   	  // 액터의 Tick 이벤트 호출
 		}
+		
+		// 고정화면이 아닌 카메라를 사용하는 종류의 게임이라면 Tick 호출됨
+		if (levelCamera) levelCamera->Tick(deltaTime);
+		
 	}
 
 	void Level::Draw()
@@ -90,7 +94,7 @@ namespace Craft
 		for (const auto& actor : actorList)
 		{
 			if (!actor->IsActive()) continue;  // 비활성화 상태인 액터는 스킵
-			actor->SavePreviousState();		   // 액터의 이전 상태 저장
+			actor->SavePreviousPosition();		   // 액터의 이전 상태 저장
 		}
 	}
 }

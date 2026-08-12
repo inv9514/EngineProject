@@ -1,12 +1,11 @@
 ﻿#pragma once
 #include <Actor/Actor.h>
 
-class Player : public Craft::Actor
+class Enemy : public Craft::Actor
 {
-    TYPE_DECLARATIONS(Player, Actor)
-    
+    TYPE_DECLARATIONS(Enemy, Actor)
 public:
-    Player();
+    Enemy();
     
 private:
     virtual void BeginPlay() override;	
@@ -18,6 +17,6 @@ private:
 private:		
     float positionX = 0.0f; 
     float positionY = 0.0f;
-    float moveSpeed = 10.0f;
-
+    float moveSpeed = 70.0f;
+    
 };

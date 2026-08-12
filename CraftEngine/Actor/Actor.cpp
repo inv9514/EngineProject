@@ -20,7 +20,7 @@ namespace Craft
 		// 중복 호출 방지를 위한 플래그설정
 		hasBeganPlay = true;
 		
-		// Actor의 BeginPlay를 보유한 Component에 전달
+		// Actor가 보유한 Component들의 BeginPlay 호출
 		for (const std::shared_ptr<Component>& component : componentList)
 		{
 			if (!component->HasBeganPlay()) component->BeginPlay();
@@ -45,7 +45,7 @@ namespace Craft
 		// Actor의 Draw 이벤트를 Component에 전달
 		for (const std::shared_ptr<Component>& component : componentList)
 		{
-			// 다른 컴포넌트의 Draw()는 비워져있지만 SpriteComponent는 Submit을 함
+			// 다른 컴포넌트의 Draw()는 비워져있지만 SpriteComponent는 렌더링 정보값들을 Submit
 			component->Draw();  
 		}
 	}
@@ -64,8 +64,7 @@ namespace Craft
 		for (const std::shared_ptr<Component>& component : componentList)
 		{
 			component->OnCollision(other);
-		}
-		
+		}		
 	}
 
 	void Actor::Destroy()
@@ -86,7 +85,7 @@ namespace Craft
 		Engine::Get().Quit();
 	}
 
-	void Actor::SavePreviousState()
+	void Actor::SavePreviousPosition()
 	{
 		// 충돌을 위해 액터의 이전 위치값을 기억하는 기능은 transform에 위임
 		if (transform) transform->SavePreviousWorldPosition();
@@ -94,7 +93,7 @@ namespace Craft
 
 	void Actor::AttachTo(const std::shared_ptr<Actor>& newParent, bool keepWorldPosition)
 	{
-		// 부모가 없거나 부모로 설정할 포인터를 읽었더니 자신이면 스킵
+		// 새로 설정할 부모가 null 이거나 부모로 설정할 포인터를 읽었더니 자신이면 스킵
 		if (!newParent || newParent.get() == this) return;
 		
 		// 기존에 부모가 있다면 제거
@@ -107,7 +106,7 @@ namespace Craft
 		// 위치 설정
 		if (transform && newParent->GetTransform())
 		{
-			// 부모와의 연결 전, 트랜스폼의 월드위치 저장 T1 
+			// 부모와의 연결 전, 트랜스폼의 월드위치 저장 
 			Vector2 worldPosition = transform->GetWorldPosition();
 			
 			// 트랜스폼의 부모 설정

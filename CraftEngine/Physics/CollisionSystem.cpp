@@ -63,9 +63,7 @@ namespace Craft
 		std::shared_ptr<BoxCollisionComponent> leftCollision = left->GetComponent<BoxCollisionComponent>();
 		std::shared_ptr<BoxCollisionComponent> rightCollision = right->GetComponent<BoxCollisionComponent>();
 		if (!leftCollision || !rightCollision) return false;
-		
-		
-
+						
 		// left 액터의 현재/이전 위치
 		const Vector2 leftCurrent = left->GetWorldPosition();
 		const Vector2 leftPrevious = left->GetPreviousPosition();

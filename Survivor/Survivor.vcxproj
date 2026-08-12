@@ -164,16 +164,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor\Enemy.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
-    <ClCompile Include="Actor\SurvivorActor.cpp" />
-    <ClCompile Include="Actor\Wall.cpp" />
+    <ClCompile Include="Component\RelativeSpriteRendererComponent.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Enemy.h" />
     <ClInclude Include="Actor\Player.h" />
-    <ClInclude Include="Actor\SurvivorActor.h" />
-    <ClInclude Include="Actor\Wall.h" />
+    <ClInclude Include="Component\RelativeSpriteRendererComponent.h" />
     <ClInclude Include="Level\GameLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

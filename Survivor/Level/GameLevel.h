@@ -1,26 +1,19 @@
-﻿
-#pragma once
-
-#include <Camera/Camera.h>
+﻿#pragma once
 #include <Level/Level.h>
 
+#include "Actor/Player.h"
 
 class GameLevel : public Craft::Level
 {
     TYPE_DECLARATIONS(GameLevel, Level)
-    
 public:
-    GameLevel();
-        
+    GameLevel() = default;
+    ~GameLevel() = default;
+    
 private:
     virtual void OnInitialized() override;
+    virtual void Tick(float deltaTime) override;
+    virtual void Draw() override;
     
-    void LoadMap(const std::string& filename);   
-    
-    /* Camera Section */
-public:
-    inline Craft::Camera* GetCamera() const { return camera.get(); }
-    
-private:
-    std::unique_ptr<Craft::Camera> camera;
+    std::shared_ptr<Craft::Actor> playerActor;
 };

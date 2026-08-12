@@ -103,8 +103,9 @@ xcopy ..\Config\* $(OutDir)..\Config\ /e /y /i</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Actor.cpp" />
-    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Camera\LevelCamera.cpp" />
     <ClCompile Include="Component\BoxCollisionComponent.cpp" />
+    <ClCompile Include="Component\CameraComponent.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Component\SpriteRendererComponent.cpp" />
     <ClCompile Include="Component\TransformComponent.cpp" />
@@ -118,8 +119,9 @@ xcopy ..\Config\* $(OutDir)..\Config\ /e /y /i</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
-    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Camera\LevelCamera.h" />
     <ClInclude Include="Component\BoxCollisionComponent.h" />
+    <ClInclude Include="Component\CameraComponent.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\SpriteRendererComponent.h" />
     <ClInclude Include="Component\TransformComponent.h" />

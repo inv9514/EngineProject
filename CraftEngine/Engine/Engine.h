@@ -14,9 +14,9 @@ namespace Craft
 	{
 		struct Setting
 		{
-			float framerate = 0.0f;
-			int width = 0;
-			int height = 0;
+			float framerate = 120.f;
+			int width = 150;
+			int height = 45;
 		};
 
 	public:
