@@ -1,5 +1,6 @@
 ﻿#include "CollisionSystem.h"
-#include "Actor/Actor.h"
+#include <Actor/Actor.h>
+#include <Component/BoxCollisionComponent.h>
 
 namespace Craft
 {
@@ -57,32 +58,38 @@ namespace Craft
 		const std::shared_ptr<Actor>& right)
 	{
 		if (!left || !right) return false;
-		// AABB (Axis Aligned Bounding Box).
+		
+		// 두 액터의 충돌 컴포넌트 확인
+		std::shared_ptr<BoxCollisionComponent> leftCollision = left->GetComponent<BoxCollisionComponent>();
+		std::shared_ptr<BoxCollisionComponent> rightCollision = right->GetComponent<BoxCollisionComponent>();
+		if (!leftCollision || !rightCollision) return false;
+		
+		
 
 		// left 액터의 현재/이전 위치
-		const Vector2 leftCurrent = left->GetPosition();
+		const Vector2 leftCurrent = left->GetWorldPosition();
 		const Vector2 leftPrevious = left->GetPreviousPosition();
 
 		// right 액터의 현재/이전 위치
-		const Vector2 rightCurrent = right->GetPosition();
+		const Vector2 rightCurrent = right->GetWorldPosition();
 		const Vector2 rightPrevious = right->GetPreviousPosition();
 
 		// 이전 프레임 위치와 현재 위치를 모두 포함하는 swept bounds 계산. (최악을 상정한 실제보다 긴 히트박스)
 		const int leftXMin = (leftCurrent.x < leftPrevious.x) ? leftCurrent.x : leftPrevious.x;
-		const int leftXMaxCurrent = leftCurrent.x + left->GetWidth() - 1;
-		const int leftXMaxPrevious = leftPrevious.x + left->GetWidth() - 1;
+		const int leftXMaxCurrent = leftCurrent.x + leftCollision->GetWidth() - 1;
+		const int leftXMaxPrevious = leftPrevious.x + leftCollision->GetWidth() - 1;
 		const int leftXMax = (leftXMaxCurrent > leftXMaxPrevious) ? leftXMaxCurrent : leftXMaxPrevious;
 
 		const int rightXMin = (rightCurrent.x < rightPrevious.x) ? rightCurrent.x : rightPrevious.x;
-		const int rightXMaxCurrent = rightCurrent.x + right->GetWidth() - 1;
-		const int rightXMaxPrevious = rightPrevious.x + right->GetWidth() - 1;
+		const int rightXMaxCurrent = rightCurrent.x + rightCollision->GetWidth() - 1;
+		const int rightXMaxPrevious = rightPrevious.x + rightCollision->GetWidth() - 1;
 		const int rightXMax = (rightXMaxCurrent > rightXMaxPrevious) ? rightXMaxCurrent : rightXMaxPrevious;
 
 		// X좌표 기준으로 충돌이 발생할 수 없는 상황 처리.
 		if (rightXMin > leftXMax) return false;    // 2번액터의 x좌표 최소치가 1번액터의 x좌표 최대치보다 오른쪽 = 떨어짐
 		if (rightXMax < leftXMin) return false;    // 대충 비슷함
 		
-		// 이전 프레임까지 고려한 y 충돌 영역 계산.  TODO : y충돌 역시 x충돌과 동일하게 처리
+		// 이전 프레임까지 고려한 y 충돌 영역 계산.
 		const int leftYMin = (leftCurrent.y < leftPrevious.y) ? leftCurrent.y : leftPrevious.y;
 		const int leftYMax = (leftCurrent.y > leftPrevious.y) ? leftCurrent.y : leftPrevious.y;
 
