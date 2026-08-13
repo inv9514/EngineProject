@@ -28,7 +28,7 @@ namespace Craft
 		virtual void Draw();
 		virtual void OnCollision(const std::shared_ptr<Actor>& other);
 
-		void Destroy();
+		virtual void Destroy();
 		void QuitGame(); // 엔진 종료 TODO : GameManager에서 관리
 		
 		inline bool HasBeganPlay() const { return hasBeganPlay; }

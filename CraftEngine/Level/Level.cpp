@@ -38,7 +38,7 @@ namespace Craft
 			actor->Tick(deltaTime);		   	  // 액터의 Tick 이벤트 호출
 		}
 		
-		// 고정화면이 아닌 카메라를 사용하는 종류의 게임이라면 Tick 호출됨
+		// 고정화면이 아닌 카메라를 사용하는 종류의 게임이라면 호출됨
 		if (levelCamera) levelCamera->Tick(deltaTime);
 		
 	}

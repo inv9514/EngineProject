@@ -29,7 +29,7 @@ void RelativeSpriteRendererComponent::Draw()
     Vector2 screenPosition = worldPosition - cameraPosition;
 
     // 카메라는 콘솔좌표 기준 중앙이므로 그만큼 위치값 가산
-    screenPosition.x += Engine::Get().GetWidth() / 2;
+    screenPosition.x += Engine::Get().GetWidth() / 2 - 20;
     screenPosition.y += Engine::Get().GetHeight() / 2;
 
     // 변환된 위치를 Submit
