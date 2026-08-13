@@ -4,6 +4,7 @@
 #include <Component/BoxCollisionComponent.h>
 
 #include "Actor/Enemy.h"
+#include "Component/StatusComponent.h"
 
 using namespace Craft;
 
@@ -34,7 +35,20 @@ void ProjectileBase::OnCollision(const std::shared_ptr<Actor>& other)
 {
     Actor::OnCollision(other);
     
-    if (other->IsTypeOf<Enemy>()) Destroy();
+    if (other->IsTypeOf<Enemy>())
+    {
+        std::shared_ptr<Enemy> enemy = Cast<Enemy>(other);
+        if (!enemy) return;
+        
+        // 데미지 처리
+        enemy->TakeDamage(damage);   
+        
+        // 넉백 처리
+        enemy->TakeKnockBack(Vector2(static_cast<int>(directionX * -2.f), static_cast<int>(directionY * -2.f)));
+        
+        Destroy();
+    }
+        
 }
 
 void ProjectileBase::Move(float targetDirectionX, float targetDirectionY, float deltaTime)

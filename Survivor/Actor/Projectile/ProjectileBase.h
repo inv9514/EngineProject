@@ -17,6 +17,9 @@ public:
     
     virtual void OnCollision(const std::shared_ptr<Actor>& other) override;
     
+/* Projectile Stat */
+    float damage = 5.f;
+    
 /* Movement */
 private:
     void Move(float targetDirectionX, float targetDirectionY, float deltaTime);

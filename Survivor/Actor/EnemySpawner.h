@@ -24,5 +24,5 @@ public:
     inline float GetSpawnInterval() { return spawnInterval; }
     
 private:
-    float spawnInterval = 3.f;
+    float spawnInterval = 1.f;
 };

@@ -2,7 +2,10 @@
 
 #include <Actor/Actor.h>
 
+#include "Util/Timer.h"
 
+
+class RelativeSpriteRendererComponent;
 class StatusComponent;
 
 class Enemy : public Craft::Actor
@@ -11,14 +14,14 @@ class Enemy : public Craft::Actor
 
 public:
     Enemy(const Craft::Vector2& position);    
-
-/* Event */
+    
+/* Event */    
 private:
     virtual void BeginPlay() override;	
     virtual void Tick(float deltaTime) override;
     virtual void OnCollision(const std::shared_ptr<Actor>& other) override;
     virtual void Destroy() override;
-
+    
     
 /* Enemy Count */
 public:
@@ -42,9 +45,7 @@ public:
     // 이동 요청이 거절되었을 경우 desiredPosition값 롤백
     void MoveRejection();
     
-private:
-    float moveSpeed = 5.f;
-    
+private:    
     // 콘솔 좌표계상의 Transform-position이 아닌 액터의 실제 누적되는 좌표값
     float positionX = 0.0f;  
     float positionY = 0.0f;  
@@ -53,12 +54,34 @@ private:
     float desiredPositionX = 0.f;
     float desiredPositionY = 0.f;
     
+/* Stats */
+    float maxHp = 10.f;
     
-/* Status 컴포넌트 */       
+    float currentHp = 10.f;
+    
+    float maxMoveSpeed = 5.f;
+    
+    float moveSpeed = 5.f;
+    
+    
+/* Combat */
 public:
-    inline std::shared_ptr<StatusComponent> GetStatus() const { return status; }
+    void TakeDamage(const float& damage);
+    
+    void TakeKnockBack(const Craft::Vector2& forceVector);
     
 private:
-    std::shared_ptr<StatusComponent> status;
+    void FlashHitEffect(const Craft::Color& color);
+    
+private:    
+    Timer reactionTimer;
+    
+    float reactionDuration = 0.4f; 
+    
+    Craft::Vector2 knockBackDirection;
+    
+    float knockBackSpeed = 15.f;
+    
+    std::shared_ptr<RelativeSpriteRendererComponent> spriteRendererComponent;
 };
 

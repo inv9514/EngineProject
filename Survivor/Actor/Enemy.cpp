@@ -6,8 +6,6 @@
 #include <Component/BoxCollisionComponent.h>
 #include <Level/level.h>
 
-#include <Level/GameLevel.h>
-
 #include "Component/StatusComponent.h"
 #include "Projectile/ProjectileBase.h"
 
@@ -20,12 +18,8 @@ Enemy::Enemy(const Vector2& position)
     : Actor(position)
 {
     // 컴포넌트 추가 
-    AddComponent<RelativeSpriteRendererComponent>("E", Color::Green, 5);
+    spriteRendererComponent = AddComponent<RelativeSpriteRendererComponent>("E", Color::Green, 5);
     AddComponent<BoxCollisionComponent>(1);
-    AddComponent<StatusComponent>(10.f, 10.f);
-    
-    // Status 컴포넌트
-    status = std::make_shared<StatusComponent>(10.f, 10.f);
 	
     // 생성 위치 설정 (Transform Component기반 콘솔 위치값)
     SetPosition(position);
@@ -38,35 +32,44 @@ Enemy::Enemy(const Vector2& position)
     desiredPositionX = positionX;
     desiredPositionY = positionY;
     
+    // 피격 리액션 타이머
+    reactionTimer.SetTargetTime(reactionDuration);
+    
     // 레벨의 EnemyCount
     ++enemyCount;
 }
 
 void Enemy::BeginPlay()
 {
-    
+    super::BeginPlay();
 }
 
-void Enemy::Tick(float DeltaTime)
+void Enemy::Tick(float deltaTime)
 {    
+    super::Tick(deltaTime);
+    
+    reactionTimer.Tick(deltaTime);
+    
+    // 피격관련 리액션 일괄처리
+    if (reactionTimer.IsTimeOut())
+    {
+        spriteRendererComponent->SetColor(Color::Green);    
+        moveSpeed = maxMoveSpeed;
+    }    
 }
 
 void Enemy::OnCollision(const std::shared_ptr<Actor>& other)
 {
-    super::OnCollision(other);
-    
-    if (other->IsTypeOf<ProjectileBase>())
-    {
-        Destroy();
-    }
+    super::OnCollision(other);    
 }
 
 void Enemy::Destroy()
 {
-    Actor::Destroy();
+    super::Destroy();
     --enemyCount;
     ++killCount;
 }
+
 
 Vector2 Enemy::SubmitMoveRequest(const Vector2& targetPosition, float deltaTime)
 {
@@ -103,4 +106,32 @@ void Enemy::MoveRejection()
     // 이동요청 거절시 축적된 desiredPosition값은 롤백되며 기존위치에서 다시 축적
     desiredPositionX = positionX;
     desiredPositionY = positionY;
+}
+
+void Enemy::TakeDamage(const float& damage)
+{
+    currentHp -= damage;    
+    FlashHitEffect(Color::Red);
+    
+    if (currentHp <= 0.f) Destroy();
+}
+
+void Enemy::TakeKnockBack(const Vector2& forceVector)
+{
+    SetPosition(GetWorldPosition() - forceVector); 
+    positionX = static_cast<int>(GetWorldPosition().x); 
+    positionY = static_cast<int>(GetWorldPosition().y); 
+    desiredPositionX = positionX; 
+    desiredPositionY = positionY;
+    
+    moveSpeed = 0.f;
+    reactionTimer.Reset();
+}
+
+void Enemy::FlashHitEffect(const Color& color)
+{
+    if (!spriteRendererComponent) return;
+    
+    spriteRendererComponent->SetColor(color);
+    reactionTimer.Reset();
 }
