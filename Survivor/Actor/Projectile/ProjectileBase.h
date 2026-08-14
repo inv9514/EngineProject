@@ -10,30 +10,38 @@ class ProjectileBase : public Craft::Actor
 
 /* Event */    
 public:
-    ProjectileBase(const Craft::Vector2& position, const std::string& image, const float& directionX, const float& directionY);
+    ProjectileBase(const Craft::Vector2& position, 
+        const std::string& image, 
+        Craft::Color color,  
+        const float directionX, 
+        const float directionY);
+    
     ~ProjectileBase() = default;
     
     virtual void Tick(float deltaTime) override;
     
-    virtual void OnCollision(const std::shared_ptr<Actor>& other) override;
+    virtual void OnCollision(const std::shared_ptr<Actor>& other) override;    
+        
     
 /* Projectile Stat */
-    float damage = 5.f;
+protected:
+    float damage = 1.f;
+    float knockBackForce = 1.f;
+    float moveSpeed = 50.f;  
     
 /* Movement */
-private:
-    void Move(float targetDirectionX, float targetDirectionY, float deltaTime);
+protected:
+    virtual void Move(float targetDirectionX, float targetDirectionY, float deltaTime);
     
-private:
-    float moveSpeed = 50.f;        
+protected:      
     float positionX = 0.f;    
     float positionY = 0.f;
     float directionX = 0.f;
-    float directionY = 0.f;    
+    float directionY = 0.f;  
     
 /* Life Span */    
-private:
-    float lifeSpan = 1.f;        
+protected:
+    float lifeSpan = 3.f;        
     
     Timer lifeSpanTimer;
 };

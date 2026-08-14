@@ -7,26 +7,19 @@
 #include <Component/RelativeSpriteRendererComponent.h>
 
 #include "Projectile/ProjectileBase.h"
+#include "Weapon/Bible.h"
+#include "Weapon/HolyWater.h"
 #include "Weapon/Knife.h"
+#include "Weapon/MagicWand.h"
 #include "Weapon/WeaponBase.h"
 
 using namespace Craft;
-
-namespace
-{
-    int GetCollisionWidth(const Actor& actor)
-    {
-        std::shared_ptr<BoxCollisionComponent> collision = actor.GetComponent<BoxCollisionComponent>();
-        return collision ? collision->GetWidth() : 0;
-    }
-}
-
 
 Player::Player()
     : Actor(Vector2::Zero)
 {
     // 컴포넌트 추가 
-    AddComponent<RelativeSpriteRendererComponent>("V", Color::Yellow, 5);
+    spriteRendererComponent = AddComponent<RelativeSpriteRendererComponent>("V", Color::Yellow, 5);
     AddComponent<BoxCollisionComponent>(1);
 	
     // 생성 위치 설정
@@ -49,7 +42,19 @@ void Player::BeginPlay()
     std::shared_ptr<Knife> knife = level->SpawnActor<Knife>(Vector2::Zero);
     knife->AttachTo(shared_from_this(), false);
     
-    weaponList.emplace_back(knife);    
+    std::shared_ptr<Bible> bible = level->SpawnActor<Bible>(Vector2::Zero);
+    bible->AttachTo(shared_from_this(), false);
+    
+    std::shared_ptr<MagicWand> wand = level->SpawnActor<MagicWand>(Vector2::Zero);
+    wand->AttachTo(shared_from_this(), false);
+    
+    std::shared_ptr<HolyWater> holyWater = level->SpawnActor<HolyWater>(Vector2::Zero);
+    holyWater->AttachTo(shared_from_this(), false);
+    
+    weaponList.push_back(knife);    
+    weaponList.push_back(bible);
+    weaponList.push_back(wand);
+    weaponList.push_back(holyWater);    
 }
 
 void Player::Tick(float deltaTime)
@@ -57,6 +62,7 @@ void Player::Tick(float deltaTime)
     super::Tick(deltaTime);
     
     ProcessInput(deltaTime);
+    Fire();
 }
 
 void Player::OnCollision(const std::shared_ptr<Actor>& other)
@@ -109,7 +115,7 @@ void Player::ProcessInput(float deltaTime)
     /* Weapon Section */
     if (Input::Get().GetKey(VK_SPACE))
     {
-        Fire();
+        // Fire();
     }
     
     /* Direction Section */
@@ -155,6 +161,22 @@ void Player::ProcessInput(float deltaTime)
     }
 }
 
+void Player::TakeDamage(const float& damage)
+{
+    currentHp -= damage;    
+    FlashHitEffect(Color::Red);
+    
+    if (currentHp <= 0.f) Destroy();
+}
+
+void Player::FlashHitEffect(const Craft::Color& color)
+{
+    if (!spriteRendererComponent) return;
+    
+    spriteRendererComponent->SetColor(color);
+    reactionTimer.Reset();
+}
+
 void Player::Fire()
 {
     std::shared_ptr<Level> level = GetOwner();
@@ -165,6 +187,6 @@ void Player::Fire()
     {
         if (!weapon || !weapon->IsActive()) continue;
               
-        weapon->ShotProjectile(directionX, directionY);   // 방향값을 쥐어주고 무기에서 Projectile 생성요청
+        weapon->ShotProjectile(directionX, directionY);   // 플레이어의 방향값만 넘겨주고 무기에서 Projectile 생성요청
     }
 }

@@ -34,6 +34,7 @@ Enemy::Enemy(const Vector2& position)
     
     // 피격 리액션 타이머
     reactionTimer.SetTargetTime(reactionDuration);
+    reactionTimer.SetElapsedTime(reactionDuration);
     
     // 레벨의 EnemyCount
     ++enemyCount;
@@ -50,7 +51,27 @@ void Enemy::Tick(float deltaTime)
     
     reactionTimer.Tick(deltaTime);
     
-    // 피격관련 리액션 일괄처리
+    // 피격 애니메이션 처리
+    if (!reactionTimer.IsTimeOut())
+    {
+        float ratio = deltaTime / reactionDuration;
+
+        positionX -= static_cast<int>(knockBackVector.x) * ratio;
+        positionY -= static_cast<int>(knockBackVector.y) * ratio;
+
+        Vector2 newPosition;
+        newPosition.x = static_cast<int>(positionX);
+        newPosition.y = static_cast<int>(positionY);
+
+        SetPosition(newPosition);
+        
+        desiredPositionX = positionX;
+        desiredPositionY = positionY;
+        
+        return;
+    }
+    
+    // 플래그로 바꿔서 처리
     if (reactionTimer.IsTimeOut())
     {
         spriteRendererComponent->SetColor(Color::Green);    
@@ -80,7 +101,6 @@ Vector2 Enemy::SubmitMoveRequest(const Vector2& targetPosition, float deltaTime)
     float directionX = v1.x / length;
     float directionY = v1.y / length;
 
-    // desiredPosition값이 누적되며 정수값 자리수가 바뀌는 순간 이동요청
     desiredPositionX += directionX * moveSpeed * deltaTime;
     desiredPositionY += directionY * moveSpeed * deltaTime;
     
@@ -108,24 +128,35 @@ void Enemy::MoveRejection()
     desiredPositionY = positionY;
 }
 
-void Enemy::TakeDamage(const float& damage)
+
+void Enemy::ReceiveHitStruct(const HitStruct& hitStruct)
 {
-    currentHp -= damage;    
+    // 데미지 처리   
+    currentHp -= hitStruct.damage;    
+    
+    // 피격이펙트 처리
     FlashHitEffect(Color::Red);
     
-    if (currentHp <= 0.f) Destroy();
-}
-
-void Enemy::TakeKnockBack(const Vector2& forceVector)
-{
-    SetPosition(GetWorldPosition() - forceVector); 
-    positionX = static_cast<int>(GetWorldPosition().x); 
-    positionY = static_cast<int>(GetWorldPosition().y); 
+    // 사망처리
+    if (currentHp <= 0.f)
+    {
+        // 나중에 Die함수로 빼고 이펙트처리 -> Destroy();
+        Destroy();
+    }
+    
+    knockBackVector = hitStruct.knockBackVector;
+    
+    /*
+    // 넉백 처리 
+    SetPosition(GetWorldPosition() - hitStruct.knockBackVector); 
+    positionX = static_cast<float>(GetWorldPosition().x); 
+    positionY = static_cast<float>(GetWorldPosition().y); 
     desiredPositionX = positionX; 
     desiredPositionY = positionY;
+    */
     
     moveSpeed = 0.f;
-    reactionTimer.Reset();
+    reactionTimer.Reset();    
 }
 
 void Enemy::FlashHitEffect(const Color& color)

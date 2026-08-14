@@ -1,12 +1,20 @@
 ﻿#pragma once
 
 #include <Actor/Actor.h>
-
-#include "Util/Timer.h"
-
+#include <Util/Timer.h>
 
 class RelativeSpriteRendererComponent;
 class StatusComponent;
+
+struct HitStruct
+{
+    HitStruct(const float inDamage, const Craft::Vector2& knockBackVector)
+    : damage(inDamage), knockBackVector(knockBackVector) {}
+        
+    float damage;
+    Craft::Vector2 knockBackVector;    
+};
+
 
 class Enemy : public Craft::Actor
 {
@@ -55,9 +63,9 @@ private:
     float desiredPositionY = 0.f;
     
 /* Stats */
-    float maxHp = 10.f;
+    float maxHp = 20.f;
     
-    float currentHp = 10.f;
+    float currentHp = 20.f;
     
     float maxMoveSpeed = 5.f;
     
@@ -66,9 +74,7 @@ private:
     
 /* Combat */
 public:
-    void TakeDamage(const float& damage);
-    
-    void TakeKnockBack(const Craft::Vector2& forceVector);
+    void ReceiveHitStruct(const HitStruct& hitStruct);
     
 private:
     void FlashHitEffect(const Craft::Color& color);
@@ -78,10 +84,11 @@ private:
     
     float reactionDuration = 0.4f; 
     
-    Craft::Vector2 knockBackDirection;
+    Craft::Vector2 knockBackDirection;    
     
-    float knockBackSpeed = 15.f;
+    Craft::Vector2 knockBackVector;
     
     std::shared_ptr<RelativeSpriteRendererComponent> spriteRendererComponent;
-};
+    
 
+};

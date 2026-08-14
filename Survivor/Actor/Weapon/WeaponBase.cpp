@@ -2,7 +2,7 @@
 #include <Component/RelativeSpriteRendererComponent.h>
 #include <Level/Level.h>
 
-#include "Actor/Projectile/Bullet.h"
+#include "Actor/Projectile/KnifeProjectile.h"
 #include "Actor/Projectile/ProjectileBase.h"
 
 using namespace Craft;
@@ -14,14 +14,14 @@ WeaponBase::WeaponBase(const Vector2& position)
 }
 
 
-void WeaponBase::ShotProjectile(const float& directionX, const float& directionY)
+void WeaponBase::ShotProjectile(const float directionX, const float directionY)
 {
     if (!CanShot()) return;
     
     std::shared_ptr<Level> level = GetOwner();
     if (!level) return;
     
-    level->SpawnActor<Bullet>(GetWorldPosition(), "*", directionX, directionY);
+    level->SpawnActor<KnifeProjectile>(GetWorldPosition(), "o", Color::White, directionX, directionY);
 }
 
 void WeaponBase::Tick(float deltaTime)

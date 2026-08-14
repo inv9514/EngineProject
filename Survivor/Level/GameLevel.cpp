@@ -95,7 +95,12 @@ void GameLevel::WaveControl(float deltaTime)
         return distSqA < distSqB; 
     });
     
+    // Weapon::MagicWand 호밍기능을 위한 가장 가까운액터 체크
+    if (enemyList.empty()) return;
+    std::shared_ptr<Enemy>& nearestEnemy = enemyList[0];
+    if (enemyList[0]) nearestEnemyPosition = enemyList[0]->GetWorldPosition();    
     
+    // 가까운 액터부터 이동요청
     for (const auto& enemy : enemyList)
     {
         // Enemy에게서 요청받은 이동위치와 현재 위치
@@ -104,7 +109,13 @@ void GameLevel::WaveControl(float deltaTime)
 
         // 둘을 비교해 움직이지 않을 액터들과 플레이어를 공격하는 위치의 액터는 이동 스킵
         if (nextPosition == currentPosition) continue;
-        if (nextPosition == playerPosition) continue;   // TODO : 이 경우 플레이어 피격처리
+        if (nextPosition == playerPosition)
+        {
+            // Enemy의 다음 위치가 Player일 경우 공격으로 판정
+            
+            continue;  
+        }
+            
         
         // 이동요청위치에 Enemy가 존재하는지 체크하고, 없다면 이동 허가처리
         if (IsPositionEmpty(nextPosition, enemy)) enemy->CommitMove(nextPosition);
@@ -128,7 +139,7 @@ bool GameLevel::IsPositionEmpty(const Vector2& position, const std::shared_ptr<E
 
 void GameLevel::OffScreenEnemySpawner()
 {
-    // 8방향 EnemySpawner TODO : 이거 이중for문으로 할수있나? 
+    // 8방향 EnemySpawner TODO : 이거 이중 for문으로 할수있지않나? 
     Vector2 spawnerPosition[] = {
         Vector2(-80, -40), Vector2(0, -40), Vector2(80, -40),
         Vector2(-80, 0),                      Vector2(80, 0),

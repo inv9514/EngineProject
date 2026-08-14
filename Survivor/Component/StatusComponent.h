@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Component/Component.h>
 
-// AttributeSet처럼 쓰려고했는데 쓸만한 멤버가 두개밖에 없어서 일단 롤백 
+// AttributeSet처럼 쓰려고했는데 실질적으로 멤버가 두개밖에 없어서 일단 액터쪽으로 롤백 
 
 class StatusComponent : public Craft::Component
 {

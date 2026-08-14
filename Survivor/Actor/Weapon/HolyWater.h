@@ -1,12 +1,13 @@
 ﻿#pragma once
 #include "WeaponBase.h"
 
-class Knife : public WeaponBase
+class HolyWater : public WeaponBase
 {
-    TYPE_DECLARATIONS(Knife, WeaponBase)
+    TYPE_DECLARATIONS(HolyWater,WeaponBase)
 
 public:
     using WeaponBase::WeaponBase;
     
     void ShotProjectile(const float directionX, const float directionY) override;
+    
 };

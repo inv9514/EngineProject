@@ -167,9 +167,15 @@
     <ClCompile Include="Actor\Enemy.cpp" />
     <ClCompile Include="Actor\EnemySpawner.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
-    <ClCompile Include="Actor\Projectile\Bullet.cpp" />
+    <ClCompile Include="Actor\Projectile\BibleProjectile.cpp" />
+    <ClCompile Include="Actor\Projectile\HolyWaterProjectile.cpp" />
+    <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />
+    <ClCompile Include="Actor\Projectile\MagicWandProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\ProjectileBase.cpp" />
+    <ClCompile Include="Actor\Weapon\Bible.cpp" />
+    <ClCompile Include="Actor\Weapon\HolyWater.cpp" />
     <ClCompile Include="Actor\Weapon\Knife.cpp" />
+    <ClCompile Include="Actor\Weapon\MagicWand.cpp" />
     <ClCompile Include="Actor\Weapon\WeaponBase.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -257,9 +263,15 @@
     <ClInclude Include="Actor\Enemy.h" />
     <ClInclude Include="Actor\EnemySpawner.h" />
     <ClInclude Include="Actor\Player.h" />
-    <ClInclude Include="Actor\Projectile\Bullet.h" />
+    <ClInclude Include="Actor\Projectile\BibleProjectile.h" />
+    <ClInclude Include="Actor\Projectile\HolyWaterProjectile.h" />
+    <ClInclude Include="Actor\Projectile\KnifeProjectile.h" />
+    <ClInclude Include="Actor\Projectile\MagicWandProjectile.h" />
     <ClInclude Include="Actor\Projectile\ProjectileBase.h" />
+    <ClInclude Include="Actor\Weapon\Bible.h" />
+    <ClInclude Include="Actor\Weapon\HolyWater.h" />
     <ClInclude Include="Actor\Weapon\Knife.h" />
+    <ClInclude Include="Actor\Weapon\MagicWand.h" />
     <ClInclude Include="Actor\Weapon\WeaponBase.h" />
     <ClInclude Include="Component\RelativeSpriteRendererComponent.h" />
     <ClInclude Include="Component\StatusComponent.h" />

@@ -3,6 +3,7 @@
 Timer::Timer(float targetTime)
     : elapsedTime(0.0f), targetTime(targetTime)
 {
+    
 }
 
 void Timer::Tick(float deltaTime)
@@ -27,4 +28,9 @@ void Timer::Reset()
 void Timer::SetTargetTime(float targetTime)
 {
     this->targetTime = targetTime;
+}
+
+void Timer::SetElapsedTime(float elapsedTime)
+{
+    this->elapsedTime = elapsedTime;
 }

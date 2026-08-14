@@ -35,4 +35,11 @@ private:
     bool IsPositionEmpty(const Craft::Vector2& position, const std::shared_ptr<Enemy>& self);
     
     void OffScreenEnemySpawner();       
+
+public:
+    // 호밍기능 구현을 위한 
+    inline Craft::Vector2 GetNearestEnemyPosition() { return nearestEnemyPosition; }
+    
+private:
+     Craft::Vector2 nearestEnemyPosition;
 };

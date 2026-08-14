@@ -13,6 +13,8 @@ public:
 
     // 목표 시간 재설정 함수.
     void SetTargetTime(float targetTime);
+    
+    void SetElapsedTime(float elapsedTime);
 
     // 설정한 시간이 지났는지 확인하는 함수.
     inline bool IsTimeOut() const { return elapsedTime >= targetTime; }
