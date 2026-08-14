@@ -80,6 +80,8 @@ private:
     void FlashHitEffect(const Craft::Color& color);
     
 private:    
+    bool isReacting = false;
+    
     Timer reactionTimer;
     
     float reactionDuration = 0.4f; 

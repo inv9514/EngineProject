@@ -6,7 +6,7 @@ class HolyWater : public WeaponBase
     TYPE_DECLARATIONS(HolyWater,WeaponBase)
 
 public:
-    using WeaponBase::WeaponBase;
+    HolyWater(const Craft::Vector2& position);
     
     void ShotProjectile(const float directionX, const float directionY) override;
     

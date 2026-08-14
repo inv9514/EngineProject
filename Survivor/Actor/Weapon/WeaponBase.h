@@ -7,30 +7,40 @@
 // 성수 : 한번에 여러개날림
 // 바이블 : 위성개수 늘어남
 // 완드 : 여러 투사체가 여러 대상을 추적함([0]뿐아니라 [1] [2] 등등)
+// 그 외 결합무기 : 화상, 빙결 등 능력을 가진 무기 추가 
 
-struct WeaponDataStruct
+struct WeaponData
 {
+    int weaponLevel;
     float damage;
     float fireInterval;
     float projectileSpeed;
+    float knockBackForce;
 };
 
 class WeaponBase : public Craft::Actor
 {
     TYPE_DECLARATIONS(WeaponBase, Actor)
     
+/* Event */
 public:
     WeaponBase(const Craft::Vector2& position);
     ~WeaponBase() = default;    
     
-    virtual void ShotProjectile(const float directionX, const float directionY);
-    
 protected:
     virtual void Tick(float deltaTime) override;
     
+/* Fire Projectile */
+public:
+    virtual void ShotProjectile(float directionX, float direction);
+    
+protected:
+    WeaponData weaponData;
+    
+/* Flag */    
+protected:    
     bool CanShot();  
     
-    float fireInterval = 0.2f; 
-    
-    Timer fireTimer;
+    Timer cooldownTimer;   
+   
 };

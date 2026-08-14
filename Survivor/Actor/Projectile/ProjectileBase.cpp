@@ -7,20 +7,27 @@
 
 using namespace Craft;
 
-ProjectileBase::ProjectileBase(const Vector2& position,
+ProjectileBase::ProjectileBase    // Weapon에서 Projectile 생성시 위치, 이미지, 색, 방향, 스탯을 지정해 생성
+    (const Vector2& position,
     const std::string& image, 
     Color color,
     const float directionX, 
-    const float directionY)
+    const float directionY,
+    const WeaponData& weaponData)
 
     : super(position), 
     positionX(static_cast<float>(position.x)), 
     positionY(static_cast<float>(position.y)),
     directionX(directionX),
-    directionY(directionY)
+    directionY(directionY)    
 {
     AddComponent<RelativeSpriteRendererComponent>(image, color, 5);
     AddComponent<BoxCollisionComponent>(1);
+    
+    weaponLevel = weaponData.weaponLevel;
+    damage = weaponData.damage;
+    knockBackForce = weaponData.knockBackForce;
+    moveSpeed = weaponData.projectileSpeed;
     
     lifeSpanTimer.SetTargetTime(lifeSpan);
 }

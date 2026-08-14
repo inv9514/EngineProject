@@ -9,32 +9,39 @@ using namespace Craft;
 
 WeaponBase::WeaponBase(const Vector2& position)
     : Actor(position)
-{
-    fireTimer.SetTargetTime(fireInterval);
+{    
+    weaponData.weaponLevel = 1;
+    weaponData.damage = 1.f;
+    weaponData.projectileSpeed = 1.f;
+    weaponData.knockBackForce = 1.f;
+    weaponData.fireInterval = 1.f;
+    
+    cooldownTimer.SetTargetTime(weaponData.fireInterval);
 }
 
 
-void WeaponBase::ShotProjectile(const float directionX, const float directionY)
+void WeaponBase::ShotProjectile(float directionX, float directionY)
 {
     if (!CanShot()) return;
     
     std::shared_ptr<Level> level = GetOwner();
     if (!level) return;
     
-    level->SpawnActor<KnifeProjectile>(GetWorldPosition(), "o", Color::White, directionX, directionY);
+    level->SpawnActor<KnifeProjectile>
+    (GetWorldPosition(), "o", Color::White, directionX, directionY, weaponData);
 }
 
 void WeaponBase::Tick(float deltaTime)
 {
     Actor::Tick(deltaTime);
     
-    fireTimer.Tick(deltaTime);
+    cooldownTimer.Tick(deltaTime);
 }
 
 bool WeaponBase::CanShot()
 {
-    if (!fireTimer.IsTimeOut()) return false;
+    if (!cooldownTimer.IsTimeOut()) return false;
     
-    fireTimer.Reset();
+    cooldownTimer.Reset();
     return true;
 }

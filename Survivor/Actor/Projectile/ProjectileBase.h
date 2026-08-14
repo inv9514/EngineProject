@@ -2,6 +2,7 @@
 #include <string>
 #include <Actor/Actor.h>
 
+#include "Actor/Weapon/WeaponBase.h"
 #include "Util/Timer.h"
 
 class ProjectileBase : public Craft::Actor
@@ -10,11 +11,13 @@ class ProjectileBase : public Craft::Actor
 
 /* Event */    
 public:
-    ProjectileBase(const Craft::Vector2& position, 
+    ProjectileBase      
+        (const Craft::Vector2& position, 
         const std::string& image, 
         Craft::Color color,  
         const float directionX, 
-        const float directionY);
+        const float directionY,
+        const WeaponData& weaponData);
     
     ~ProjectileBase() = default;
     
@@ -23,10 +26,11 @@ public:
     virtual void OnCollision(const std::shared_ptr<Actor>& other) override;    
         
     
-/* Projectile Stat */
+/* Projectile Stats */
 protected:
+    int weaponLevel = 1;
     float damage = 1.f;
-    float knockBackForce = 1.f;
+    float knockBackForce = 2.f;
     float moveSpeed = 50.f;  
     
 /* Movement */

@@ -6,19 +6,6 @@
 
 using namespace Craft;
 
-BibleProjectile::BibleProjectile(
-    const Craft::Vector2& position, 
-    const std::string& image,
-    Color color,
-    const float directionX,
-    const float directionY)
-        :  super(position, "##", Color::Blue, directionX, directionY)
-{
-    damage = 20.f;
-    knockBackForce = 4.f;
-    moveSpeed = 0.f;
-}
-
 void BibleProjectile::OnCollision(const std::shared_ptr<Actor>& other)
 {
     Actor::OnCollision(other);
@@ -41,12 +28,14 @@ void BibleProjectile::OnCollision(const std::shared_ptr<Actor>& other)
 
 void BibleProjectile::Tick(float deltaTime)
 {
-    if (!IsActive()) return;	
-		
+    /* Bible은 무브셋과 LifeSpan이 독특해 Tick 직접구현 */
+    
+    // Actor::Tick 파트
+    if (!IsActive()) return;			
     for (const std::shared_ptr<Component>& component : componentList)
         component->Tick(deltaTime);
     
-    Move(0, 0, deltaTime);  // 타겟디렉션 사용안함 = 0
+    Move(0, 0, deltaTime);
 }
 
 void BibleProjectile::Move(float targetDirectionX, float targetDirectionY, float deltaTime)

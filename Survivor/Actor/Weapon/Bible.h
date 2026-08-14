@@ -34,5 +34,6 @@ private:
     
     /* Life Span */    
 protected:    
-    bool isAlreadyExist; // 나중에 웨폰레벨과 비교해서 < 으로 변경
+    bool isAlreadyExist = false; // 나중에 웨폰레벨과 비교해서 < 으로 변경
+    
 };

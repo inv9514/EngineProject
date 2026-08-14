@@ -9,11 +9,7 @@ class BibleProjectile  : public ProjectileBase
     TYPE_DECLARATIONS(BibleProjectile, ProjectileBase)
     
 public:
-    BibleProjectile(const Craft::Vector2& position, 
-        const std::string& image, 
-        Craft::Color color, 
-        const float directionX, 
-        const float directionY);
+    using ProjectileBase::ProjectileBase;
     
     ~BibleProjectile() = default;
     

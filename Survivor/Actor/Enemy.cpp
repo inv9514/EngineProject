@@ -1,12 +1,9 @@
 ﻿#include "Enemy.h"
 
-#include <iostream>
 #include <valarray>
 #include <Component/RelativeSpriteRendererComponent.h>
 #include <Component/BoxCollisionComponent.h>
 #include <Level/level.h>
-
-#include "Component/StatusComponent.h"
 #include "Projectile/ProjectileBase.h"
 
 using namespace Craft;
@@ -51,32 +48,33 @@ void Enemy::Tick(float deltaTime)
     
     reactionTimer.Tick(deltaTime);
     
-    // 피격 애니메이션 처리
-    if (!reactionTimer.IsTimeOut())
+    if (isReacting)
     {
-        float ratio = deltaTime / reactionDuration;
+        // 피격 애니메이션 처리
+        if (!reactionTimer.IsTimeOut())
+        {
+            float ratio = deltaTime / reactionDuration;
 
-        positionX -= static_cast<int>(knockBackVector.x) * ratio;
-        positionY -= static_cast<int>(knockBackVector.y) * ratio;
+            positionX -= static_cast<int>(knockBackVector.x) * ratio;
+            positionY -= static_cast<int>(knockBackVector.y) * ratio;
 
-        Vector2 newPosition;
-        newPosition.x = static_cast<int>(positionX);
-        newPosition.y = static_cast<int>(positionY);
+            Vector2 newPosition;
+            newPosition.x = static_cast<int>(positionX);
+            newPosition.y = static_cast<int>(positionY);
 
-        SetPosition(newPosition);
+            SetPosition(newPosition);
         
-        desiredPositionX = positionX;
-        desiredPositionY = positionY;
+            desiredPositionX = positionX;
+            desiredPositionY = positionY;
         
-        return;
-    }
-    
-    // 플래그로 바꿔서 처리
-    if (reactionTimer.IsTimeOut())
-    {
+            return;
+        }
+        
+        // 애니메이션 타임 만료 후 원상복구
         spriteRendererComponent->SetColor(Color::Green);    
         moveSpeed = maxMoveSpeed;
-    }    
+        isReacting = false;
+    }   
 }
 
 void Enemy::OnCollision(const std::shared_ptr<Actor>& other)
@@ -131,6 +129,8 @@ void Enemy::MoveRejection()
 
 void Enemy::ReceiveHitStruct(const HitStruct& hitStruct)
 {
+    isReacting = true;
+    
     // 데미지 처리   
     currentHp -= hitStruct.damage;    
     
@@ -145,15 +145,6 @@ void Enemy::ReceiveHitStruct(const HitStruct& hitStruct)
     }
     
     knockBackVector = hitStruct.knockBackVector;
-    
-    /*
-    // 넉백 처리 
-    SetPosition(GetWorldPosition() - hitStruct.knockBackVector); 
-    positionX = static_cast<float>(GetWorldPosition().x); 
-    positionY = static_cast<float>(GetWorldPosition().y); 
-    desiredPositionX = positionX; 
-    desiredPositionY = positionY;
-    */
     
     moveSpeed = 0.f;
     reactionTimer.Reset();    

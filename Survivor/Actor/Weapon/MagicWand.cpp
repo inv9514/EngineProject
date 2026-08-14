@@ -10,9 +10,15 @@ using namespace Craft;
 MagicWand::MagicWand(const Craft::Vector2& position)
     : super(position)
 {
-    fireInterval = 10.f;
-    fireTimer.Reset();
-    fireTimer.SetTargetTime(fireInterval);
+    
+    weaponData.weaponLevel = 1;
+    weaponData.damage = 3.f;
+    weaponData.projectileSpeed = 50.f;
+    weaponData.knockBackForce = 2.f;
+    weaponData.fireInterval = 0.3f;
+    
+    cooldownTimer.SetTargetTime(weaponData.fireInterval);
+    
 }
 
 void MagicWand::ShotProjectile(const float directionX, const float directionY)
@@ -34,5 +40,6 @@ void MagicWand::ShotProjectile(const float directionX, const float directionY)
     float homingDirectionX = v1.x / length;
     float homingDirectionY = v1.y / length;
     
-    level->SpawnActor<MagicWandProjectile>(GetWorldPosition(), "*", Color::Cyan, homingDirectionX, homingDirectionY);
+    level->SpawnActor<MagicWandProjectile>
+    (GetWorldPosition(), "*", Color::BrightPurple, homingDirectionX, homingDirectionY, weaponData);
 }
