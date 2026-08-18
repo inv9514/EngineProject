@@ -164,6 +164,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor\Drops\DropActor.cpp" />
+    <ClCompile Include="Actor\Drops\ExpActor.cpp" />
     <ClCompile Include="Actor\Effect\ExplosiveEffect.cpp" />
     <ClCompile Include="Actor\Enemy.cpp" />
     <ClCompile Include="Actor\EnemySpawner.cpp" />
@@ -249,11 +251,13 @@
     <ClCompile Include="Actor\Projectile\BibleProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\HolyWaterProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\KnifeProjectile.cpp" />
+    <ClCompile Include="Actor\Projectile\LaserProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\MagicWandProjectile.cpp" />
     <ClCompile Include="Actor\Projectile\ProjectileBase.cpp" />
     <ClCompile Include="Actor\Weapon\Bible.cpp" />
     <ClCompile Include="Actor\Weapon\HolyWater.cpp" />
     <ClCompile Include="Actor\Weapon\Knife.cpp" />
+    <ClCompile Include="Actor\Weapon\Laser.cpp" />
     <ClCompile Include="Actor\Weapon\MagicWand.cpp" />
     <ClCompile Include="Actor\Weapon\WeaponBase.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -334,11 +338,18 @@
     </ClCompile>
     <ClCompile Include="Component\RelativeSpriteRendererComponent.cpp" />
     <ClCompile Include="Component\StatusComponent.cpp" />
+    <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\GameLevel.cpp" />
+    <ClCompile Include="Level\GameOverLevel.cpp" />
+    <ClCompile Include="Level\MainMenuLevel.cpp" />
+    <ClCompile Include="Level\PauseLevel.cpp" />
+    <ClCompile Include="Level\SelectLevel.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Util\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Drops\DropActor.h" />
+    <ClInclude Include="Actor\Drops\ExpActor.h" />
     <ClInclude Include="Actor\Effect\ExplosiveEffect.h" />
     <ClInclude Include="Actor\Enemy.h" />
     <ClInclude Include="Actor\EnemySpawner.h" />
@@ -348,16 +359,23 @@
     <ClInclude Include="Actor\Projectile\BibleProjectile.h" />
     <ClInclude Include="Actor\Projectile\HolyWaterProjectile.h" />
     <ClInclude Include="Actor\Projectile\KnifeProjectile.h" />
+    <ClInclude Include="Actor\Projectile\LaserProjectile.h" />
     <ClInclude Include="Actor\Projectile\MagicWandProjectile.h" />
     <ClInclude Include="Actor\Projectile\ProjectileBase.h" />
     <ClInclude Include="Actor\Weapon\Bible.h" />
     <ClInclude Include="Actor\Weapon\HolyWater.h" />
     <ClInclude Include="Actor\Weapon\Knife.h" />
+    <ClInclude Include="Actor\Weapon\Laser.h" />
     <ClInclude Include="Actor\Weapon\MagicWand.h" />
     <ClInclude Include="Actor\Weapon\WeaponBase.h" />
     <ClInclude Include="Component\RelativeSpriteRendererComponent.h" />
     <ClInclude Include="Component\StatusComponent.h" />
+    <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Level\GameLevel.h" />
+    <ClInclude Include="Level\GameOverLevel.h" />
+    <ClInclude Include="Level\MainMenuLevel.h" />
+    <ClInclude Include="Level\PauseLevel.h" />
+    <ClInclude Include="Level\SelectLevel.h" />
     <ClInclude Include="Util\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

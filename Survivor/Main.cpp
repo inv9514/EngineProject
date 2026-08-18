@@ -2,9 +2,12 @@
 #include <Engine/Engine.h>
 #include <Level/GameLevel.h>
 
+#include "Game/Game.h"
+#include "Level/MainMenuLevel.h"
+
 int main()
 {
-    Craft::Engine engine;
-    engine.AddNewLevel<GameLevel>();
-    engine.Run();
+    Game game;
+    game.AddNewLevel<MainMenuLevel>();
+    game.Run();
 }

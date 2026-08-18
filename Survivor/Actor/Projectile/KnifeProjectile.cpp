@@ -1,16 +1,28 @@
 ﻿#include "KnifeProjectile.h"
+#include "Actor/Enemy.h"
 
 using namespace Craft;
 
+float KnifeProjectile::totalDamage = 0.f;
 
-std::string KnifeProjectile::GetImage(const float& directionX, const float& directionY)
+void KnifeProjectile::OnCollision(const std::shared_ptr<Actor>& other)
 {
-    if (directionX > 0.f && directionY > 0.f) return "\\";    
-    if (directionX > 0.f && directionY < 0.f) return "/";    
-    if (directionX < 0.f && directionY < 0.f) return "\\";    
-    if (directionX < 0.f && directionY > 0.f) return "/";
-    if (directionX != 0.f && directionY == 0.f) return "-";
-    if (directionX == 0.f && directionY != 0.f) return "|"; 
+    Actor::OnCollision(other);
     
-    return "|";    
+    if (other->IsTypeOf<Enemy>())
+    {
+        std::shared_ptr<Enemy> enemy = Cast<Enemy>(other);
+        if (!enemy) return;
+        
+        Vector2 knockBack = Vector2(
+            static_cast<int>(directionX * knockBackForce * -1),
+            static_cast<int>(directionY * knockBackForce * -1));
+        
+        HitStruct hitStruct(damage, knockBack);
+       
+        enemy->ReceiveHitStruct(hitStruct);      
+        totalDamage += damage;
+        Destroy();
+    }        
 }
+

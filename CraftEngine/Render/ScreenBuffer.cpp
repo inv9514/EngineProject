@@ -30,7 +30,7 @@ namespace Craft
 		assert(result == TRUE);
 
 		// 화면 버퍼 크기 설정(창 내부에서 글자들의 한계영역 크기)
-		result = SetConsoleScreenBufferSize(buffer, size);         // TODO : 얘는 어케설정되어있지?
+		result = SetConsoleScreenBufferSize(buffer, size);         
 		assert(result == TRUE);
 
 		// 콘솔 커서정보 받아오고 커서 숨김 설정 

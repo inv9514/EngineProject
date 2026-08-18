@@ -63,6 +63,8 @@ private:
     float desiredPositionY = 0.f;
     
 /* Stats */
+    int enemyLevel = 1;
+    
     float maxHp = 20.f;
     
     float currentHp = 20.f;

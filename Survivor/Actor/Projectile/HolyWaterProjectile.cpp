@@ -5,6 +5,9 @@
 
 using namespace Craft;
 
+float HolyWaterProjectile::totalDamage = 0.f;
+
+
 HolyWaterProjectile::HolyWaterProjectile(
     const Vector2& position,
     const std::string& image,
@@ -20,7 +23,7 @@ HolyWaterProjectile::HolyWaterProjectile(
         directionY,
         weaponData)
 {    
-    lifeSpanTimer.SetTargetTime(Util::RandomRange(0.5f, 1.5f));
+    lifeSpanTimer.SetTargetTime(Util::RandomRange(0.5f, 1.2f));
 }
 
 void HolyWaterProjectile::Tick(float deltaTime)
@@ -35,6 +38,24 @@ void HolyWaterProjectile::Tick(float deltaTime)
     if (lifeSpanTimer.IsTimeOut())
     {
         // 폭발시작 
+        std::shared_ptr<Level> level = GetOwner();
+        if (level)
+        {
+            std::shared_ptr<ExplosiveSpawner> spawner =  level->SpawnActor<ExplosiveSpawner>(GetWorldPosition());
+            spawner->CreateExplosiveActors();
+        }
+        
         Destroy();
     }
+}
+
+void HolyWaterProjectile::OnCollision(const std::shared_ptr<Actor>& other)
+{
+    // 성수는 Enemy와 상호작용 x 상위 Actor::OnCollision 직접호출 
+    if (!IsActive()) return;
+		
+    for (const std::shared_ptr<Component>& component : componentList)
+    {
+        component->OnCollision(other);
+    }	
 }

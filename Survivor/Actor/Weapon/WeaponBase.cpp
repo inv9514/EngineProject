@@ -45,3 +45,8 @@ bool WeaponBase::CanShot()
     cooldownTimer.Reset();
     return true;
 }
+
+void WeaponBase::ApplyLevelAdjustment()
+{
+    weaponData.damage = 4.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));  // 공증 5%
+}

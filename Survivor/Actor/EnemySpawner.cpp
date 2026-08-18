@@ -30,7 +30,7 @@ void EnemySpawner::SpawnEnemy()
 {
     Vector2 spawnPosition = GetTransform()->GetWorldPosition();
     
-    const Vector2 randomPositonVariation(Vector2(Util::RandomRange(-5,5), Util::RandomRange(-5,5)));
+    const Vector2 randomPositonVariation(Vector2(Util::RandomRange(-10,10), Util::RandomRange(-10,10)));
     
     GetOwner()->SpawnActor<Enemy>(spawnPosition + randomPositonVariation);
 }

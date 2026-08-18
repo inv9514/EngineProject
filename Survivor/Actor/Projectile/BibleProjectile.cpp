@@ -1,10 +1,11 @@
 ﻿#include "BibleProjectile.h"
-
 #include <cmath>
-
 #include "Actor/Enemy.h"
 
 using namespace Craft;
+
+float BibleProjectile::totalDamage = 0.f;
+
 
 void BibleProjectile::OnCollision(const std::shared_ptr<Actor>& other)
 {
@@ -22,6 +23,7 @@ void BibleProjectile::OnCollision(const std::shared_ptr<Actor>& other)
         HitStruct hitStruct(damage, knockBack);
        
         enemy->ReceiveHitStruct(hitStruct);       
+        totalDamage += damage;
     }
         
 }

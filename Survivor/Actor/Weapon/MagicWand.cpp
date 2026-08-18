@@ -10,9 +10,10 @@ using namespace Craft;
 MagicWand::MagicWand(const Craft::Vector2& position)
     : super(position)
 {
+    weaponType = WeaponType::MagicWand;
     
     weaponData.weaponLevel = 1;
-    weaponData.damage = 3.f;
+    weaponData.damage = 10.f;
     weaponData.projectileSpeed = 50.f;
     weaponData.knockBackForce = 2.f;
     weaponData.fireInterval = 0.3f;
@@ -42,4 +43,9 @@ void MagicWand::ShotProjectile(const float directionX, const float directionY)
     
     level->SpawnActor<MagicWandProjectile>
     (GetWorldPosition(), "*", Color::BrightPurple, homingDirectionX, homingDirectionY, weaponData);
+}
+
+void MagicWand::ApplyLevelAdjustment()
+{
+    weaponData.damage = 10.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));
 }

@@ -9,6 +9,15 @@
 // 완드 : 여러 투사체가 여러 대상을 추적함([0]뿐아니라 [1] [2] 등등)
 // 그 외 결합무기 : 화상, 빙결 등 능력을 가진 무기 추가 
 
+enum class WeaponType
+{
+    Knife,
+    Bible,
+    HolyWater,
+    MagicWand,
+    Laser
+};
+
 struct WeaponData
 {
     int weaponLevel;
@@ -34,13 +43,18 @@ protected:
 public:
     virtual void ShotProjectile(float directionX, float direction);
     
-protected:
     WeaponData weaponData;
+    
+    WeaponType weaponType; // 업그레이드용
     
 /* Flag */    
 protected:    
     bool CanShot();  
     
     Timer cooldownTimer;   
-   
+    
+/* Upgrade */
+public:
+    virtual void ApplyLevelAdjustment();
+    
 };

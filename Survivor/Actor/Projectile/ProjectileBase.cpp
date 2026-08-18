@@ -59,8 +59,7 @@ void ProjectileBase::OnCollision(const std::shared_ptr<Actor>& other)
        
         enemy->ReceiveHitStruct(hitStruct);        
         Destroy();
-    }
-        
+    }        
 }
 
 void ProjectileBase::Move(float targetDirectionX, float targetDirectionY, float deltaTime)

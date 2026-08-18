@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <string>
 #include <Level/Level.h>
 #include <Actor/Player.h>
 #include <Math/Vector2.h>
@@ -10,6 +11,7 @@
 // 다음 액터역시 똑같은 과정. 이를 모든 액터가 확인하고 한번에 이동함
 
 
+class SelectLevel;
 
 class GameLevel : public Craft::Level
 {
@@ -26,9 +28,9 @@ private:
     
 /* Player 참조 */
 private:
-    std::shared_ptr<Craft::Actor> playerActor;
+    std::shared_ptr<Player> playerActor;
     
-/* Enemy 로직 정리 */
+/* Enemy Control Section */
 private:
     void WaveControl(float deltaTime);             
     
@@ -37,9 +39,33 @@ private:
     void OffScreenEnemySpawner();       
 
 public:
-    // 호밍기능 구현을 위한 
     inline Craft::Vector2 GetNearestEnemyPosition() { return nearestEnemyPosition; }
     
 private:
      Craft::Vector2 nearestEnemyPosition;
+    
+/* UI */
+public:
+    inline int GetWaveLevel() { return waveLevel; }
+
+private:
+    void SubmitUIRequestToRender(const Craft::Vector2& position, const std::string& message, Craft::Color color);
+    
+    float uptime = 0.f;
+    
+    int waveLevel = 1;
+    
+/* Player - SelectLevel 데이터 전송을 위한 참조 */    
+public:
+    inline void SetSelectLevel(const std::shared_ptr<SelectLevel>& newSelectLevel) { selectLevel = newSelectLevel; }
+
+private:
+    std::weak_ptr<SelectLevel> selectLevel;
+  
+/* Deco (이부분 코드 아직 이해못함) */
+private:
+    void DrawGroundDecorations() const;
+    
+    static uint32_t MakePositionHash(int x, int y);
+    
 };

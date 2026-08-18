@@ -6,10 +6,13 @@
 
 #include <Component/RelativeSpriteRendererComponent.h>
 
+#include "Enemy.h"
+#include "Game/Game.h"
 #include "Projectile/ProjectileBase.h"
 #include "Weapon/Bible.h"
 #include "Weapon/HolyWater.h"
 #include "Weapon/Knife.h"
+#include "Weapon/Laser.h"
 #include "Weapon/MagicWand.h"
 #include "Weapon/WeaponBase.h"
 
@@ -19,7 +22,7 @@ Player::Player()
     : Actor(Vector2::Zero)
 {
     // 컴포넌트 추가 
-    spriteRendererComponent = AddComponent<RelativeSpriteRendererComponent>("V", Color::Yellow, 5);
+    spriteRendererComponent = AddComponent<RelativeSpriteRendererComponent>("V", Color::Yellow, 7);
     AddComponent<BoxCollisionComponent>(1);
 	
     // 생성 위치 설정
@@ -39,22 +42,32 @@ void Player::BeginPlay()
     std::shared_ptr<Level> level = GetOwner();
     if (!level) return;
     
+    
     std::shared_ptr<Knife> knife = level->SpawnActor<Knife>(Vector2::Zero);
     knife->AttachTo(shared_from_this(), false);
+    knife->weaponData.weaponLevel = 0; 
     
     std::shared_ptr<Bible> bible = level->SpawnActor<Bible>(Vector2::Zero);
     bible->AttachTo(shared_from_this(), false);
+    bible->weaponData.weaponLevel = 0; 
     
     std::shared_ptr<MagicWand> wand = level->SpawnActor<MagicWand>(Vector2::Zero);
     wand->AttachTo(shared_from_this(), false);
+    wand->weaponData.weaponLevel = 0;
     
     std::shared_ptr<HolyWater> holyWater = level->SpawnActor<HolyWater>(Vector2::Zero);
     holyWater->AttachTo(shared_from_this(), false);
+    holyWater->weaponData.weaponLevel = 0;
+    
+    std::shared_ptr<Laser> laser = level->SpawnActor<Laser>(Vector2::Zero);
+    laser->AttachTo(shared_from_this(), false);
+    laser->weaponData.weaponLevel = 0;
     
     weaponList.push_back(knife);    
     weaponList.push_back(bible);
     weaponList.push_back(wand);
     weaponList.push_back(holyWater);    
+    weaponList.push_back(laser);    
 }
 
 void Player::Tick(float deltaTime)
@@ -68,12 +81,20 @@ void Player::Tick(float deltaTime)
 void Player::OnCollision(const std::shared_ptr<Actor>& other)
 {
     super::OnCollision(other);
+    
+    if (other->IsTypeOf<Enemy>())
+    {
+        std::shared_ptr<Enemy> enemy = Cast<Enemy>(other);
+        if (!enemy) return;
+        
+        TakeDamage(1.f);
+    }        
 }
 
 void Player::Move(float moveDirectionX, float moveDirectionY, float deltaTime)
 {
     positionX = positionX + moveDirectionX * moveSpeed * deltaTime;
-    positionY = positionY + moveDirectionY * moveSpeed * deltaTime / 2;
+    positionY = positionY + moveDirectionY * moveSpeed * deltaTime; 
 
     Vector2 newPosition;
     newPosition.x = static_cast<int>(positionX);
@@ -85,8 +106,10 @@ void Player::ProcessInput(float deltaTime)
 {
     /* Engine Section */
     if (Input::Get().GetKeyDown(VK_ESCAPE))
-    {
-        QuitGame();
+    {        
+        Game& game = dynamic_cast<Game&>(Engine::Get());
+        game.OpenPauseMenu();
+        return;
     }
     
     /* Movement Section */
@@ -161,12 +184,16 @@ void Player::ProcessInput(float deltaTime)
     }
 }
 
-void Player::TakeDamage(const float& damage)
+void Player::TakeDamage(const float damage)
 {
-    currentHp -= damage;    
-    FlashHitEffect(Color::Red);
-    
-    if (currentHp <= 0.f) Destroy();
+    playerLife -= damage;
+
+    // 겜끝
+    if (playerLife <= 0.f)
+    {
+        Game& game = dynamic_cast<Game&>(Engine::Get());
+        game.OpenGameOverLevel();
+    }
 }
 
 void Player::FlashHitEffect(const Craft::Color& color)
@@ -185,8 +212,55 @@ void Player::Fire()
     /* 보유중인 모든 무기를 일제히 발사 (뱀서식) */
     for (const std::shared_ptr<WeaponBase>& weapon : weaponList)
     {
-        if (!weapon || !weapon->IsActive()) continue;
-              
+        if (!weapon || !weapon->IsActive() || weapon->weaponData.weaponLevel == 0) continue;              
         weapon->ShotProjectile(directionX, directionY);   // 플레이어의 방향값만 넘겨주고 무기에서 Projectile 생성요청
     }
+}
+
+void Player::ReceiveExp(int expAmount)
+{
+    exp += expAmount;
+
+    while (exp >= GetRequiredExp())
+    {
+        exp -= GetRequiredExp();
+        ++playerLevel;
+        
+        Game& game = dynamic_cast<Game&>(Engine::Get());
+        game.OpenSelectMenu();
+        return;
+    }
+}
+
+const int Player::GetRequiredExp()
+{
+    if (playerLevel <  20) return 5 + (playerLevel - 1) * 10;
+    if (playerLevel == 20) return 795;
+    if (playerLevel <  40) return 208 + (playerLevel - 21) * 13;
+    return 458 + (playerLevel - 41) * 16;
+}
+
+void Player::UpgradeWeapon(WeaponType weaponType)
+{
+    for (const std::shared_ptr<WeaponBase>& weapon : weaponList)
+    {
+        if (!weapon) continue;
+
+        if (weapon->weaponType == weaponType)
+        {
+            ++weapon->weaponData.weaponLevel;
+            weapon->ApplyLevelAdjustment();
+            return;
+        }
+    }
+}
+
+int Player::GetWeaponLevel(WeaponType type) const
+{
+    for (const std::shared_ptr<WeaponBase>& weapon : weaponList)
+    {
+        if (!weapon) continue;
+        if (weapon->weaponType == type) return weapon->weaponData.weaponLevel;
+    }
+    return 0;
 }

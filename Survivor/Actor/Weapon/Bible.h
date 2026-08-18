@@ -6,10 +6,10 @@ class Bible : public WeaponBase
     TYPE_DECLARATIONS(Bible, WeaponBase)
     
 public:
-    Bible(const Craft::Vector2& position);
+    Bible(const Craft::Vector2& position, int weaponLevel = 1);
     ~Bible() = default;  
     
-    virtual void ShotProjectile(const float directionX, const float directionY) override;    
+    virtual void ShotProjectile(float directionX, float directionY) override;    
     
 protected:
     /* Projectile Stat */
@@ -30,10 +30,15 @@ protected:
 private:
     float angle = 0.f;
     float radius = 10.f;
-    float angularSpeed = 2.f;
+    float angularSpeed = 2.f;    
     
-    /* Life Span */    
-protected:    
-    bool isAlreadyExist = false; // 나중에 웨폰레벨과 비교해서 < 으로 변경
+/* Upgrade */
+public:
+    virtual void ApplyLevelAdjustment() override;
+    
+private:
+    int bibleCount = 1;
+    bool isAlreadyExist = false;
+    
     
 };

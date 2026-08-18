@@ -4,6 +4,10 @@
 #include <Component/RelativeSpriteRendererComponent.h>
 #include <Component/BoxCollisionComponent.h>
 #include <Level/level.h>
+
+#include "Drops/DropActor.h"
+#include "Drops/ExpActor.h"
+#include "Level/GameLevel.h"
 #include "Projectile/ProjectileBase.h"
 
 using namespace Craft;
@@ -15,7 +19,7 @@ Enemy::Enemy(const Vector2& position)
     : Actor(position)
 {
     // 컴포넌트 추가 
-    spriteRendererComponent = AddComponent<RelativeSpriteRendererComponent>("E", Color::Green, 5);
+    spriteRendererComponent = AddComponent<RelativeSpriteRendererComponent>("E", Color::Green, 6);
     AddComponent<BoxCollisionComponent>(1);
 	
     // 생성 위치 설정 (Transform Component기반 콘솔 위치값)
@@ -34,12 +38,20 @@ Enemy::Enemy(const Vector2& position)
     reactionTimer.SetElapsedTime(reactionDuration);
     
     // 레벨의 EnemyCount
-    ++enemyCount;
+    ++enemyCount;        
 }
 
 void Enemy::BeginPlay()
 {
     super::BeginPlay();
+    
+    // 레벨비례 스탯조정   
+    std::shared_ptr<GameLevel> level = Cast<GameLevel>(GetOwner());
+    if (!level) return; // 얘 왜 생성자에선 안되고 BeginPlay에선 true
+
+    enemyLevel = level->GetWaveLevel();
+    maxHp = maxHp + static_cast<float>(enemyLevel * 10); // 렙당 고정치 + 10
+    currentHp = maxHp;
 }
 
 void Enemy::Tick(float deltaTime)
@@ -87,6 +99,10 @@ void Enemy::Destroy()
     super::Destroy();
     --enemyCount;
     ++killCount;
+    
+    std::shared_ptr<Level> level = GetOwner();
+    if (!level) return; 
+    level->SpawnActor<ExpActor>(GetWorldPosition());    
 }
 
 
@@ -145,8 +161,8 @@ void Enemy::ReceiveHitStruct(const HitStruct& hitStruct)
     }
     
     knockBackVector = hitStruct.knockBackVector;
-    
     moveSpeed = 0.f;
+    
     reactionTimer.Reset();    
 }
 

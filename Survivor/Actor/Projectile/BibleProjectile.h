@@ -31,4 +31,11 @@ private:
     float angularSpeed = 2.f;            
     
     int bibleIndex = 0; 
+    
+/* 누적 Damage */
+public:
+    static float GetTotalDamage() {  return totalDamage; }
+
+private:
+    static float totalDamage;
 };

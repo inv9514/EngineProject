@@ -7,15 +7,22 @@
 
 using namespace Craft;
 
-Bible::Bible(const Vector2& position)
+Bible::Bible(const Vector2& position, int weaponLevel)
     : super (position)
 {
-    weaponData.weaponLevel = 1;
-    weaponData.damage = 4.f;
-    weaponData.projectileSpeed = 0.f;  // Bible은 발사체가 없고 공전궤도 사용
+    weaponType = WeaponType::Bible;
+
+    // 현재 무기 레벨
+    weaponData.weaponLevel = weaponLevel;
+
+    // 레벨과 상관없는 고정값
+    weaponData.projectileSpeed = 0.f;
     weaponData.knockBackForce = 0.f;
     weaponData.fireInterval = 0.f;
-    
+
+    // 현재 레벨에 따른 값 계산
+    ApplyLevelAdjustment();
+
     cooldownTimer.SetTargetTime(weaponData.fireInterval);
 }
 
@@ -41,4 +48,9 @@ void Bible::ShotProjectile(const float directionX, const float directionY)
     projectile2->AttachTo(shared_from_this(), false);
     
     isAlreadyExist = true;
+}
+
+void Bible::ApplyLevelAdjustment()
+{
+    weaponData.damage = 7.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));
 }

@@ -55,7 +55,7 @@ namespace Craft
 
 	void Level::ProcessAddAndDestroyActors()
 	{
-		/* Step 0 : 액터의 컴포넌트 추가 처리 TODO : 위치 여기있을 필요가 있나? 바꾸고 멀쩡하면 킵 */
+		/* Step 0 : 액터의 컴포넌트 추가 처리  */
 		for (const std::shared_ptr<Actor>& actor : actorList)
 		{
 			if (actor) actor->ProcessAddComponents();

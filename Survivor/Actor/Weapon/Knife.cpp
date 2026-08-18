@@ -7,8 +7,10 @@ using namespace Craft;
 Knife::Knife(const Craft::Vector2& position)
     : super(position)
 {
+    weaponType = WeaponType::Knife;
+    
     weaponData.weaponLevel = 1;
-    weaponData.damage = 5.f;
+    weaponData.damage = 7.f;
     weaponData.projectileSpeed = 60.f;
     weaponData.knockBackForce = 3.f;
     weaponData.fireInterval = 0.2f;
@@ -25,6 +27,11 @@ void Knife::ShotProjectile(const float directionX, const float directionY)
         
     level->SpawnActor<KnifeProjectile>
     (GetWorldPosition(), GetImage(directionX, directionY), Color::White, directionX, directionY, weaponData);
+}
+
+void Knife::ApplyLevelAdjustment()
+{
+    weaponData.damage = 7.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));
 }
 
 std::string Knife::GetImage(const float& directionX, const float& directionY)

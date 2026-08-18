@@ -11,6 +11,12 @@ public:
     
     ~KnifeProjectile() = default;
     
+    virtual void OnCollision(const std::shared_ptr<Actor>& other) override;    
+    
+/* 누적 Damage */
+public:
+    static float GetTotalDamage() {  return totalDamage; }
+
 private:
-    std::string GetImage(const float& directionX, const float& directionY);
+    static float totalDamage;
 };
