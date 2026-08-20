@@ -16,7 +16,7 @@ namespace Craft
 		friend class Engine;
 
 	public:
-		Level();
+		Level(); 
 		virtual ~Level();		
 
 	public:

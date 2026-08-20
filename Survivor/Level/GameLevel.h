@@ -11,6 +11,8 @@
 // 다음 액터역시 똑같은 과정. 이를 모든 액터가 확인하고 한번에 이동함
 
 
+class ExpActor;
+class DropActor;
 class SelectLevel;
 
 class GameLevel : public Craft::Level
@@ -68,4 +70,11 @@ private:
     
     static uint32_t MakePositionHash(int x, int y);
     
+/* 자석기능 */
+public:
+    void AddToDropActorList(std::shared_ptr<ExpActor> drops);
+    
+    void MoveAllDropActorsToPlayer();
+    
+    std::vector<std::shared_ptr<ExpActor>> dropActorList;
 };

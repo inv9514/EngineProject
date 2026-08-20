@@ -24,14 +24,14 @@ void GameOverLevel::Draw()
     Level::Draw();
 
     Renderer::Get().Submit(
-        "GAME OVER",
+        "You're Dead",
         Vector2(68, 18),
         Color::BrightRed,
         10);
 
     Renderer::Get().Submit(
-        "Press Enter",
-        Vector2(67, 22),
+        "Press Enter to Quit",
+        Vector2(64, 22),
         Color::White,
         10);
 }

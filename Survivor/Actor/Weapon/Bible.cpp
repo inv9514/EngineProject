@@ -4,7 +4,7 @@
 #include <Level/Level.h>
 
 #include "Actor/Projectile/BibleProjectile.h"
-
+#include <algorithm>
 using namespace Craft;
 
 Bible::Bible(const Vector2& position, int weaponLevel)
@@ -20,37 +20,55 @@ Bible::Bible(const Vector2& position, int weaponLevel)
     weaponData.knockBackForce = 0.f;
     weaponData.fireInterval = 0.f;
 
-    // 현재 레벨에 따른 값 계산
-    ApplyLevelAdjustment();
 
     cooldownTimer.SetTargetTime(weaponData.fireInterval);
 }
 
 void Bible::ShotProjectile(const float directionX, const float directionY)
 {
-    if (isAlreadyExist) return;  // Bible은 투사체를 추가 생성하지 않음
-    
     std::shared_ptr<Level> level = GetOwner();
     if (!level) return;
-    
-    std::shared_ptr<BibleProjectile> projectile =
-        level->SpawnActor<BibleProjectile>
-    (Vector2::Zero,"##",Color::Blue,directionX,directionY, weaponData);    
-    
-    std::shared_ptr<BibleProjectile> projectile2 =
-        level->SpawnActor<BibleProjectile>
-    (Vector2::Zero,"##",Color::Blue,directionX,directionY, weaponData);
 
-    projectile->SetBibleIndex(0);
-    projectile->AttachTo(shared_from_this(), false);
-    
-    projectile2->SetBibleIndex(1);
-    projectile2->AttachTo(shared_from_this(), false);
-    
-    isAlreadyExist = true;
+    if (spawnedBibleCount >= bibleProjectileCount)
+        return;
+
+    while (spawnedBibleCount < bibleProjectileCount)
+    {
+        std::shared_ptr<BibleProjectile> projectile =
+            level->SpawnActor<BibleProjectile>(
+                Vector2::Zero,
+                "##",
+                Color::Blue,
+                directionX,
+                directionY,
+                weaponData);
+
+        projectile->AttachTo(shared_from_this(), false);
+
+        bibleProjectileList.push_back(projectile);
+
+        ++spawnedBibleCount;
+    }
+
+    // 새 개수 기준으로 전체 바이블 각도 재배치
+    const float angleInterval =
+        2.f * 3.141592f / static_cast<float>(bibleProjectileCount);
+
+    for (int i = 0; i < bibleProjectileList.size(); ++i)
+    {
+        if (!bibleProjectileList[i]) continue;
+
+        bibleProjectileList[i]->SetAngle(
+            angleInterval * static_cast<float>(i)
+        );
+    }
 }
 
 void Bible::ApplyLevelAdjustment()
 {
-    weaponData.damage = 7.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));
+    const int level = static_cast<int>(weaponData.weaponLevel);
+
+    weaponData.damage = 7.f * (1.f + 0.05f * (level - 1));
+
+    bibleProjectileCount = min(1 + (weaponData.weaponLevel - 1) / 2, 5);
 }

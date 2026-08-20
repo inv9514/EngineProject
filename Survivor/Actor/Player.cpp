@@ -45,7 +45,7 @@ void Player::BeginPlay()
     
     std::shared_ptr<Knife> knife = level->SpawnActor<Knife>(Vector2::Zero);
     knife->AttachTo(shared_from_this(), false);
-    knife->weaponData.weaponLevel = 0; 
+    knife->weaponData.weaponLevel = 1; 
     
     std::shared_ptr<Bible> bible = level->SpawnActor<Bible>(Vector2::Zero);
     bible->AttachTo(shared_from_this(), false);

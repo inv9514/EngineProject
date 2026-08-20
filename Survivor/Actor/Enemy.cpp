@@ -9,6 +9,9 @@
 #include "Drops/ExpActor.h"
 #include "Level/GameLevel.h"
 #include "Projectile/ProjectileBase.h"
+#include <Util/Util.h>
+
+#include "Drops/MagnetActor.h"
 
 using namespace Craft;
 
@@ -100,9 +103,25 @@ void Enemy::Destroy()
     --enemyCount;
     ++killCount;
     
+    // 얘네 하기전에 킵한번 해야겠다 이거
     std::shared_ptr<Level> level = GetOwner();
     if (!level) return; 
-    level->SpawnActor<ExpActor>(GetWorldPosition());    
+    std::shared_ptr<GameLevel> gameLevel = Cast<GameLevel>(level);
+    if (!gameLevel) return;
+    
+  //  gameLevel->AddToDropActorList( level->SpawnActor<ExpActor>(GetWorldPosition()));  
+    if (Util::RandomRange(1, 100) <= 50)
+    {
+        level->SpawnActor<ExpActor>(GetWorldPosition());  
+    }
+    
+    // 5% 확률로 자석 드랍
+    if (Util::RandomRange(1, 100) <= 50)
+    {
+        //level->SpawnActor<MagnetActor>(GetWorldPosition());
+    }
+    
+    
 }
 
 

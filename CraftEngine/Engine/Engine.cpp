@@ -53,8 +53,6 @@ namespace Craft
 		{
 			if (isQuit) break;
 
-			ProcessInput();
-
 			// 프레임 제한을 위한 처리
 			QueryPerformanceCounter(&counter);
 			current = counter.QuadPart;
@@ -63,6 +61,9 @@ namespace Craft
 			// 메인 프로세스 (프레임 제한값보다 빨랐다면 전체 스킵)
 			if (deltaTime >= oneFrameTime)
 			{
+				// 입력처리 
+				ProcessInput();
+				
 				// 게임 이벤트 함수 호출
 				OnInitialized();
 
@@ -177,7 +178,7 @@ namespace Craft
 	{
 		assert(input && "input should not null here");
 		if (!input) return;
-		input->SavePreviousStates();
+		input->SavePreviousInput();
 	}
 
 	void Engine::Shutdown()

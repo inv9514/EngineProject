@@ -38,4 +38,12 @@ public:
 
 private:
     static float totalDamage;
+
+/* Upgrades */
+public:
+    inline void SetBibleCount(int count) { bibleCount = count; }
+
+    inline void SetAngle(float newAngle) { angle = newAngle; }
+private:
+    int bibleCount = 1;
 };

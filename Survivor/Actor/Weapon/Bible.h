@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "WeaponBase.h"
 
+class BibleProjectile;
+
 class Bible : public WeaponBase
 {
     TYPE_DECLARATIONS(Bible, WeaponBase)
@@ -38,7 +40,8 @@ public:
     
 private:
     int bibleCount = 1;
-    bool isAlreadyExist = false;
+    std::vector<std::shared_ptr<BibleProjectile>> bibleProjectileList;
     
-    
+    int bibleProjectileCount = 1;
+    int spawnedBibleCount = 0;
 };

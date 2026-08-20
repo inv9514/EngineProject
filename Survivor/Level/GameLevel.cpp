@@ -251,3 +251,13 @@ uint32_t GameLevel::MakePositionHash(int x, int y)
 
     return hash;
 }
+
+void GameLevel::AddToDropActorList(std::shared_ptr<ExpActor> drops)
+{
+    dropActorList.emplace_back(drops);
+}
+
+void GameLevel::MoveAllDropActorsToPlayer()
+{
+    
+}

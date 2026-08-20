@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClCompile Include="Actor\Drops\DropActor.cpp" />
     <ClCompile Include="Actor\Drops\ExpActor.cpp" />
+    <ClCompile Include="Actor\Drops\MagnetActor.cpp" />
     <ClCompile Include="Actor\Effect\ExplosiveEffect.cpp" />
     <ClCompile Include="Actor\Enemy.cpp" />
     <ClCompile Include="Actor\EnemySpawner.cpp" />
@@ -350,6 +351,7 @@
   <ItemGroup>
     <ClInclude Include="Actor\Drops\DropActor.h" />
     <ClInclude Include="Actor\Drops\ExpActor.h" />
+    <ClInclude Include="Actor\Drops\MagnetActor.h" />
     <ClInclude Include="Actor\Effect\ExplosiveEffect.h" />
     <ClInclude Include="Actor\Enemy.h" />
     <ClInclude Include="Actor\EnemySpawner.h" />

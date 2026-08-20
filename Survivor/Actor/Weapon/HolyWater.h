@@ -10,6 +10,9 @@ public:
     
     void ShotProjectile(const float directionX, const float directionY) override;
     
-    virtual void ApplyLevelAdjustment();
+    virtual void ApplyLevelAdjustment() override;
+  
+private:
+    int waterProjectileCount = 1;
     
 };

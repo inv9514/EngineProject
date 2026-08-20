@@ -43,10 +43,14 @@ void BibleProjectile::Tick(float deltaTime)
 void BibleProjectile::Move(float targetDirectionX, float targetDirectionY, float deltaTime)
 {
     angle += angularSpeed * deltaTime;
+
     Vector2 localPosition;
 
-    localPosition.x = static_cast<int>(std::cos(angle) * radius *2);
-    localPosition.y = static_cast<int>(std::sin(angle) * radius);
+    localPosition.x =
+        static_cast<int>(std::cos(angle) * radius * 2);
 
-    GetTransform()->SetLocalPosition(localPosition + Vector2(0, bibleIndex));
+    localPosition.y =
+        static_cast<int>(std::sin(angle) * radius);
+
+    GetTransform()->SetLocalPosition(localPosition);
 }

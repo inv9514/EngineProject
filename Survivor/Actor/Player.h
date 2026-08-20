@@ -42,8 +42,8 @@ public:
     
 private:
     float playerLife = 100.f;
-    float maxMoveSpeed = 25.f;
-    float moveSpeed = 25.0f;   
+    float maxMoveSpeed = 10.f;
+    float moveSpeed = 10.f;   
     
     int playerLevel = 1;
     int exp = 0;

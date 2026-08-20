@@ -3,7 +3,7 @@
 #include <Actor/Projectile/HolyWaterProjectile.h>
 
 #include <Util/Util.h>
-
+#include <algorithm>
 using namespace Craft;
 
 HolyWater::HolyWater(const Craft::Vector2& position)
@@ -27,16 +27,20 @@ void HolyWater::ShotProjectile(const float directionX, const float directionY)
     std::shared_ptr<Level> level = GetOwner();
     if (!level) return;
     
-    float randomDirectionX = Util::RandomRange(-1.f, 1.f);
-    float randomDirectionY = Util::RandomRange(-1.f, 1.f);
+    for (int i = 0; i < waterProjectileCount; ++i)
+    {
+        float randomDirectionX = Util::RandomRange(-1.f, 1.f);
+        float randomDirectionY = Util::RandomRange(-1.f, 1.f);
     
-    level->SpawnActor<HolyWaterProjectile>
-    (GetWorldPosition(), "&&", Color::Cyan, randomDirectionX, randomDirectionY, weaponData);
-    
-    
+        level->SpawnActor<HolyWaterProjectile>
+        (GetWorldPosition(), "&&", Color::Cyan, randomDirectionX, randomDirectionY, weaponData);
+    }        
 }
 
 void HolyWater::ApplyLevelAdjustment()
 {
-    weaponData.damage = 7.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));
+    weaponData.damage = 7.f * (1.f + 0.05f * static_cast<int>(weaponData.weaponLevel - 1));    
+    
+    waterProjectileCount = min(1 + (weaponData.weaponLevel - 1) / 2, 4);
+    
 }
